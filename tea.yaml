@@ -1,0 +1,53 @@
+class Task:
+    def __init__(self, description, due_date):
+        self.description = description
+        self.due_date = due_date
+        self.completed = False
+
+class TaskManager:
+    def __init__(self):
+        self.tasks = []
+
+    def add_task(self, task):
+        self.tasks.append(task)
+
+    def view_tasks(self):
+        for i, task in enumerate(self.tasks, start=1):
+            status = "Completed" if task.completed else "Pending"
+            print(f"{i}. {task.description} (Due: {task.due_date}) - {status}")
+
+    def mark_task_completed(self, task_index):
+        if 1 <= task_index <= len(self.tasks):
+            self.tasks[task_index - 1].completed = True
+            print("Task marked as completed.")
+        else:
+            print("Invalid task index.")
+
+if __name__ == "__main__":
+    task_manager = TaskManager()
+
+    while True:
+        print("\nTask Manager Menu:")
+        print("1. Add Task")
+        print("2. View Tasks")
+        print("3. Mark Task Completed")
+        print("4. Quit")
+
+        choice = input("Enter your choice (1-4): ")
+
+        if choice == "1":
+            description = input("Enter task description: ")
+            due_date = input("Enter due date (YYYY-MM-DD): ")
+            task = Task(description, due_date)
+            task_manager.add_task(task)
+            print("Task added successfully.")
+        elif choice == "2":
+            task_manager.view_tasks()
+        elif choice == "3":
+            task_index = int(input("Enter task index to mark as completed: "))
+            task_manager.mark_task_completed(task_index)
+        elif choice == "4":
+            print("Exiting Task Manager. Goodbye!")
+            break
+        else:
+            print("Invalid choice. Please enter a number between 1 and 4.")
