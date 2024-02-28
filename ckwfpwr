@@ -1,0 +1,21 @@
+import subprocess
+
+def get_signal_power(interface="wlan0"):
+    try:
+        result = subprocess.run(["iwconfig", interface], capture_output=True, text=True)
+        output_lines = result.stdout.splitlines()
+
+        for line in output_lines:
+            if "Signal level" in line:
+                signal_power = line.split("Signal level=")[1].split(" ")[0]
+                return signal_power
+
+        return "Signal power information not found."
+
+    except FileNotFoundError:
+        return "Error: 'iwconfig' command not found. Make sure you are running this on a Linux system."
+
+if __name__ == "__main__":
+    interface_name = input("Enter the Wi-Fi interface name (default is wlan0): ").strip() or "wlan0"
+    signal_power = get_signal_power(interface_name)
+    print(f"Signal Power for {interface_name}: {signal_power}")
