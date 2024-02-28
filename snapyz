@@ -1,0 +1,18 @@
+from scapy.all import sniff, ARP
+
+def arp_scan_callback(packet):
+    if ARP in packet and packet[ARP].op in (1, 2):  # 1 for request, 2 for reply
+        mac_address = packet[ARP].hwsrc
+        ip_address = packet[ARP].psrc
+        print(f"Device with MAC address {mac_address} joined the network with IP address {ip_address}")
+
+def start_arp_scan(interface="wlan0"):
+    print(f"Scanning devices on {interface}... Press Ctrl+C to stop.")
+    try:
+        sniff(iface=interface, prn=arp_scan_callback, store=0)
+    except KeyboardInterrupt:
+        print("Scan stopped.")
+
+if __name__ == "__main__":
+    interface_name = input("Enter the Wi-Fi interface name (default is wlan0): ").strip() or "wlan0"
+    start_arp_scan(interface_name)
